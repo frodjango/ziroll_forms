@@ -6,8 +6,9 @@ class App extends Component {
         this.state = {
             firstName: "",
             lastName: "",
-            description: "Empty desciption",
-            isFriendly: false,
+            description: "",
+            commentaire: "Ce texte provient du state",
+            isFriendly: true,
             gender: "",
             favColor: "blue"
         }
@@ -15,8 +16,24 @@ class App extends Component {
     }
     
     handleChange(event) {
+        // Extraire de la structure 
         const {name, value, type, checked} = event.target
-        type === "checkbox" ? this.setState({ [name]: checked }) : this.setState({ [name]: value })
+
+        type === "checkbox" ? 
+            this.setState({ [name]: checked }) :    // checked is owned by the DOM and is toggling by itself
+            this.setState({ [name]: value })        // assigner au champs pointe par name (e.g. lastName)
+                                                    // ce qui est entre dans le champs value
+        // Remarque sur les check boxes
+        // C'est un peu bizarre cette relation circulaire entre le state
+        // isFriendly et l'etat du Form item 'checked'.
+
+        // From https://www.w3schools.com/tags/att_input_checked.asp
+        // The checked attribute is a boolean attribute.
+        //
+        // When present, it specifies that an <input> element should be pre-selected (checked) when the page loads.
+        // The checked attribute can be used with <input type="checkbox"> and <input type="radio">.
+        // The checked attribute can also be set after the page load, with a JavaScript.
+
     }
     
     render() {
@@ -29,7 +46,7 @@ class App extends Component {
                     placeholder="First Name" 
                     onChange={this.handleChange} 
                 />
-                <br />
+                
                 <input 
                     type="text" 
                     value={this.state.lastName} 
@@ -48,15 +65,29 @@ class App extends Component {
                      *  <select> and <option> elements
                      */
                 }
-                
+                <br />
+                {/* 
+                    Deux exemples de text area avec leur initialisations
+                    a des endroits differents.
+                */}
+
                 <textarea 
                     name="description"
+                    placeholder="ce texte provient du placeholder JSX"
                     value={this.state.description}
                     onChange={this.handleChange}
                 />
                 
                 <br />
+
+                <textarea 
+                    name="commentaire"
+                    value={this.state.commentaire}
+                    onChange={this.handleChange}
+                />
                 
+                <br />
+
                 <label>
                     <input 
                         type="checkbox" 
@@ -65,7 +96,9 @@ class App extends Component {
                         onChange={this.handleChange}
                     /> Is friendly?
                 </label>
+
                 <br />
+
                 <label>
                     <input 
                         type="radio" 
